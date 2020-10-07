@@ -8,30 +8,6 @@
 
 3. Install dependencies: ./gradlew build
 
-# ICON Network for Java SDK 
-Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://www.icondev.io/docs/java-sdk)
-
-## Usage
-
-Send ICX transaction
-
-Example: Send **11** ICX from **c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366** (Private key) to **hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea** (Address)
-```
-gradle myRun --args='c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366  hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea 11'
-```
-
-
-Access to the ICON testnet block explorer to verify value
-1. Go to this page [https://bicon.tracker.solidwallet.io/](https://bicon.tracker.solidwallet.io/)
-![](images/Screenshot_2020-09-30_at_15.03.14.png)
-
-2. And the search bar: search the address `hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea`
-![](images/Screenshot_2020-10-01_at_15.20.13.png)
-
-
-=====================================================================
-
-
 # EOS Network for Java SDK 
 Wraper class from EOSIO Java SDK [https://github.com/EOSIO/eosio-java](https://github.com/EOSIO/eosio-java)
 
@@ -68,3 +44,28 @@ In order to verify this feature, we can:
 - Go to the block explorer https://local.bloks.io/account/aloxidejs123?nodeUrl=history.testnet.canfoundation.io&coreSymbol=CAT&systemDomain=eosio.
 - Click to the Contract tab - Table section
 - See that the data in Table is the same with the data received when running script
+
+
+
+
+
+
+# ICON Network for Java SDK 
+Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://www.icondev.io/docs/java-sdk)
+
+## Usage
+
+Send ICX transaction
+
+Example: Send **11** ICX from **c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366** (Private key) to **hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea** (Address)
+```
+gradle myRun --args='c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366  hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea 11'
+```
+
+
+Access to the ICON testnet block explorer to verify value
+1. Go to this page [https://bicon.tracker.solidwallet.io/](https://bicon.tracker.solidwallet.io/)
+![](images/Screenshot_2020-09-30_at_15.03.14.png)
+
+2. And the search bar: search the address `hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea`
+![](images/Screenshot_2020-10-01_at_15.20.13.png)
