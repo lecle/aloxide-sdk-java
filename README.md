@@ -1,7 +1,3 @@
-# ICON Network for Java SDK 
-Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://www.icondev.io/docs/java-sdk)
-
-
 ## Installation
 1. Install envinronment:
 
@@ -12,6 +8,8 @@ Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://w
 
 3. Install dependencies: ./gradlew build
 
+# ICON Network for Java SDK 
+Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://www.icondev.io/docs/java-sdk)
 
 ## Usage
 
