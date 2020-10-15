@@ -18,6 +18,7 @@ import java.util.Map;
 
 import foundation.icon.icx.KeyWallet;
 import foundation.icon.icx.crypto.KeystoreException;
+import kr.co.lecle.aloxide.old.ICONWalletManager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

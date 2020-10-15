@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package kr.co.lecle.aloxide.old;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -53,7 +53,7 @@ public class ICONTransactionManager {
      * @return TransactionResult
      * @throws IOException
      */
-    TransactionResult sendICX(String privateKey, String value, String toAddress, Boolean isMainNet) throws IOException {
+    public TransactionResult sendICX(String privateKey, String value, String toAddress, Boolean isMainNet) throws IOException {
         Wallet wallet = KeyWallet.load(new Bytes(privateKey));
         Address addressToSend = new Address(toAddress);
         // 1 ICX -> 1000000000000000000 loop conversion

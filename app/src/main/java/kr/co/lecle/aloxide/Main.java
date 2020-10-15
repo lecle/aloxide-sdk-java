@@ -1,26 +1,36 @@
 package kr.co.lecle.aloxide;
 
-import java.io.IOException;
 
-import foundation.icon.icx.data.TransactionResult;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by quocb14005xx on 07,October,2020
  */
 public class Main {
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
-        if (args != null && args.length > 0) {
-            System.out.println("Your private key: " + args[0]);
-            System.out.println("Address to send: " + args[1]);
-            System.out.println("ICX: " + args[2]);
-            try {
-                TransactionResult result = ICONTransactionManager.getInstance("https://bicon.net.solidwallet.io/api/v3").sendICX(args[0], args[2].toString(), args[1], false);
-                System.out.println("TransactionResult " + result.getStatus());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Please provide the args for me [your private key], [address to send icx], [icx value]");
+        System.out.println("Aloxide JavaSDK");
+        Aloxide poll = new Aloxide(Network.EOS).model("Poll"
+                , new BlockchainAccount.BlockchainAccountBuilder()
+                        .setName("aloxidejs123")
+                        .setPrivateKey("5JHQ3GuzcQtEQgG3SGvtDU7v2b7ioKznYBizA1V5mBUUsLNcXdQ")
+                        .build()
+                , "aloxidejs123");
+
+        try {
+            Map<String, String> d = new HashMap<>();
+            d.put("id", "999");
+            d.put("user", "aloxidejs123");
+            d.put("name", "NEW NAME");
+            d.put("body", "NEW BODY");
+            poll.add(d);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
