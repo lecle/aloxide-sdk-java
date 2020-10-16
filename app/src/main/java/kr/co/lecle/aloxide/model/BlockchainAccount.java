@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package kr.co.lecle.aloxide.model;
 
 /**
  * Created by quocb14005xx on 14,October,2020
@@ -29,7 +29,6 @@ public class BlockchainAccount {
         this.privateKey = builder.privateKey;
     }
 
-    //Builder Class
     public static class BlockchainAccountBuilder {
 
         private String name = "";

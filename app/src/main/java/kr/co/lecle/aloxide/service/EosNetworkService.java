@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package kr.co.lecle.aloxide.service;
 
 import android.os.Build;
 
@@ -26,20 +26,21 @@ import io.jafka.jeos.impl.EosApiServiceGenerator;
 import io.jafka.jeos.impl.EosChainApiService;
 import io.jafka.jeos.util.KeyUtil;
 import io.jafka.jeos.util.Raw;
+import kr.co.lecle.aloxide.model.BlockchainAccount;
 
 /**
  * Created by quocb14005xx on 12,October,2020
  * "https://testnet.canfoundation.io"
  */
-class EosNetworkService extends BlockchainNetwork {
+public class EosNetworkService extends BlockchainNetwork {
     private String enityName;
     private String contract;
     private String url;
     private BlockchainAccount account;
     private EosApi eosApi;
 
-    EosNetworkService(String entityName, BlockchainAccount account, String contract, String url) {
-        this.enityName = entityName.toLowerCase();
+    public EosNetworkService(String entityName, BlockchainAccount account, String contract, String url) {
+        this.enityName = entityName;
         this.account = account;
         this.contract = contract;
         this.url = url;
@@ -48,7 +49,6 @@ class EosNetworkService extends BlockchainNetwork {
 
 
     /**
-     *
      * @param id
      * @return Map{}
      */
@@ -114,7 +114,6 @@ class EosNetworkService extends BlockchainNetwork {
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
         AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
-
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
@@ -130,9 +129,21 @@ class EosNetworkService extends BlockchainNetwork {
         AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, d);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
+    /**
+     * Validation in EOS Network with the condition below:
+     * - check the method name exist or not in ABI,...
+     * - check non-null input: private key, account name, method is lower case
+     * @return
+     */
+    @Override
+    public boolean validate() {
+        return true;
+    }
+
 
     /**
      * Local Sign Transaction
+     *
      * @param privateKey
      * @param arg
      * @param t
@@ -145,6 +156,7 @@ class EosNetworkService extends BlockchainNetwork {
     }
 
     /**
+     * Custom source from pull request ref: https://github.com/adyliu/jeos/pull/10/files
      *
      * @param scope
      * @param code

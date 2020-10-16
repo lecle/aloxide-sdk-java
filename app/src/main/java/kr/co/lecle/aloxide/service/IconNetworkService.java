@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package kr.co.lecle.aloxide.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,6 +16,7 @@ import foundation.icon.icx.transport.http.HttpProvider;
 import foundation.icon.icx.transport.jsonrpc.RpcItem;
 import foundation.icon.icx.transport.jsonrpc.RpcObject;
 import foundation.icon.icx.transport.jsonrpc.RpcValue;
+import kr.co.lecle.aloxide.model.BlockchainAccount;
 import kr.co.lecle.aloxide.old.ICONWalletManager;
 import okhttp3.OkHttpClient;
 
@@ -23,7 +24,7 @@ import okhttp3.OkHttpClient;
  * Created by quocb14005xx on 12,October,2020
  * "https://bicon.net.solidwallet.io/api/v3"
  */
-class IconNetworkService extends BlockchainNetwork {
+public class IconNetworkService extends BlockchainNetwork {
 
     private IconService iconService;
     private String enityName;
@@ -38,13 +39,13 @@ class IconNetworkService extends BlockchainNetwork {
      * @param url
      * @param networkId
      */
-    IconNetworkService(String enityName, BlockchainAccount account, String contract, String url, Integer networkId) {
+    public IconNetworkService(String enityName, BlockchainAccount account, String contract, String url, Integer networkId) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(200, TimeUnit.MILLISECONDS)
                 .writeTimeout(600, TimeUnit.MILLISECONDS)
                 .build();
         iconService = new IconService(new HttpProvider(okHttpClient, url));
-        this.enityName = enityName.toLowerCase();
+        this.enityName = enityName;
         this.account = account;
         this.contract = contract;
         if (networkId != null) {
@@ -60,9 +61,9 @@ class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    Object get(Object id) throws Exception {
+    public Object get(Object id) throws Exception {
         final String methodName = "get" + this.enityName;
-        boolean valid = this.validate(methodName);
+        boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
         RpcObject params = new RpcObject.Builder()
                 .put("id", new RpcValue(id.toString()))
@@ -93,9 +94,9 @@ class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    Object add(Object params) throws Exception {
+    public Object add(Object params) throws Exception {
         final String methodName = "cre" + this.enityName;
-        boolean valid = this.validate(methodName);
+        boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
         return sendTransaction(methodName, (RpcObject) params);
     }
@@ -109,9 +110,9 @@ class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    Object update(String id, Object params) throws Exception {
+    public Object update(String id, Object params) throws Exception {
         final String methodName = "upd" + this.enityName;
-        boolean valid = this.validate(methodName);
+        boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
         return sendTransaction(methodName, (RpcObject) params);
     }
@@ -124,9 +125,9 @@ class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    Object delete(String id) throws Exception {
+    public Object delete(String id) throws Exception {
         final String methodName = "del" + this.enityName;
-        boolean valid = this.validate(methodName);
+        boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
         RpcObject params = new RpcObject.Builder()
                 .put("id", new RpcValue(id))
@@ -135,12 +136,26 @@ class IconNetworkService extends BlockchainNetwork {
     }
 
     /**
+     * Validation in ICON Network like: check the method name exist or not in SCORE,...
+     *
+     * @return
+     */
+    @Override
+    public boolean validate() {
+        return true;
+    }
+
+    /**
      * @param methodName
      * @param params
      * @return txHash
      * @throws IOException
      */
-    private Object sendTransaction(String methodName, RpcObject params) throws IOException {
+    private Object sendTransaction(String methodName, RpcObject params) throws Exception {
+        if (this.account == null)
+            throw new Exception("[Aloxide]:::You need setup the private key to get the wallet in ICON network");
+        if (this.contract == null)
+            throw new Exception("[Aloxide]:::You need setup the contract to send transaction in ICON network");
         Transaction transaction = TransactionBuilder.newBuilder()
                 .nid(BigInteger.valueOf(nId))
                 .from(new Address(this.account.getAddress()))

@@ -14,4 +14,6 @@ public interface AbsAloxideMethod {
 
     Object delete(String id) throws Exception;
 
+
+
 }
