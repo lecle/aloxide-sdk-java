@@ -1,4 +1,3 @@
-
 # Aloxide
 
 A wrapper class to read, write data to EOS/ICON Network
@@ -40,6 +39,9 @@ Aloxide aloxide = AloxideBuilder.newBuilder()
                 .setContract(/*the contract*/)
                 .build();
 ```
+
+```**These samples assume you deployed the SmartContract/SCORE like Poll{id, name, body}**```
+
 **To add new record to blockchain, by run**
 
 Example: Add new object `id=9999`, `name="NEW NAME"`, `body="NEW BODY"`. Return the Object dynamic you can use to cast/parse this result (`Poll poll = Poll.from(result);`).
