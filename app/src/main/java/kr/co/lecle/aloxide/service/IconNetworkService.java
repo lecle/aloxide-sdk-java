@@ -41,8 +41,8 @@ public class IconNetworkService extends BlockchainNetwork {
      */
     public IconNetworkService(String enityName, BlockchainAccount account, String contract, String url, Integer networkId) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(200, TimeUnit.MILLISECONDS)
-                .writeTimeout(600, TimeUnit.MILLISECONDS)
+                .readTimeout(3000, TimeUnit.MILLISECONDS)
+                .writeTimeout(6000, TimeUnit.MILLISECONDS)
                 .build();
         iconService = new IconService(new HttpProvider(okHttpClient, url));
         this.enityName = enityName;

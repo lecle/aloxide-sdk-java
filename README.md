@@ -31,7 +31,7 @@ implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 **Aloxide initialization**
 
 ```java
-Aloxide aloxide = AloxideBuilder.newBuilder()
+Aloxide poll = AloxideBuilder.newBuilder()
                 .setNetwork(Network.EOS)
                 .setUrl(/*your node url*/)
                 .setBlockchainAccount(/*your blockchain account information*/)
@@ -52,7 +52,7 @@ Map<String, String> d = new HashMap<>();
 d.put("id", "9999");
 d.put("name", "NEW NAME");
 d.put("body", "NEW BODY");
-Object result = aloxide.add(d);
+Object result = poll.add(d);
 ```
 **To get the record to blockchain by id, by run**
 
@@ -61,7 +61,7 @@ Example: Get the object by `id=9999`.
 
 ```java
 Map<String, String> d = new HashMap<>();
-Object result = aloxide.get("9999");
+Object result = poll.get("9999");
 ```
 **To update the record to blockchain by id, by run**
 
@@ -73,7 +73,7 @@ Map<String, String> d = new HashMap<>();
 d.put("id", "9999");
 d.put("name", "NEW NAME updated");
 d.put("body", "NEW BODY updated");
-Object result = aloxide.update("9999", d);
+Object result = poll.update("9999", d);
 ```
 
 **To delete the record to blockchain by id, by run**
@@ -83,5 +83,5 @@ Example: Delete the object by `id=9999`.
 
 ```java
 Map<String, String> d = new HashMap<>();
-Object result = aloxide.delete("9999");
+Object result = poll.delete("9999");
 ```

@@ -71,7 +71,9 @@ public class EosNetworkService extends BlockchainNetwork {
         String methodName = "cre" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
+        Map newMap = ((HashMap)params);
+        newMap.put("user",this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
@@ -113,7 +115,9 @@ public class EosNetworkService extends BlockchainNetwork {
         String methodName = "upd" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
+        Map newMap = ((HashMap)params);
+        newMap.put("user",this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
