@@ -1,8 +1,5 @@
 package kr.co.lecle.aloxide;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import kr.co.lecle.aloxide.model.BlockchainAccount;
 import kr.co.lecle.aloxide.service.BlockchainNetwork;
@@ -26,19 +23,16 @@ class Aloxide implements AbsAloxideMethod {
         return this.blockchainNetwork.get(id);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Object add(Object params) throws Exception {
         return this.blockchainNetwork.add(params);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Object update(String id, Object params) throws Exception {
         return this.blockchainNetwork.update(id, params);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Object delete(String id) throws Exception {
         return this.blockchainNetwork.delete(id);

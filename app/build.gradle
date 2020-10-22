@@ -1,4 +1,12 @@
+import java.lang.reflect.Method
+
 apply plugin: 'com.android.application'
+///////////////// read the environment config
+def envProperties = new Properties()
+def envPropertiesFile = rootProject.file('env.properties')
+if (envPropertiesFile.exists()) {
+    envProperties.load(new FileInputStream(envPropertiesFile))
+}
 
 android {
     compileSdkVersion 30
@@ -10,6 +18,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def accountName = envProperties.getProperty("app_blockchain_account")
+        def blockchain_contract = envProperties.getProperty("app_blockchain_contract")
+        def pk = envProperties.getProperty("app_blockchain_account_pk")
+        def url = envProperties.getProperty("app_blockchain_url")
+        def blockchainType = envProperties.getProperty("app_blockchain_type")
+
+        buildConfigField "String","BLOCKCHAIN_ACCOUNT", "\"$accountName\""
+        buildConfigField "String","BLOCKCHAIN_CONTRACT", "\"$blockchain_contract\""
+        buildConfigField "String","PRIVATIE_KEY","\"$pk\""
+        buildConfigField "String","BLOCKCHAIN_URL", "\"$url\""
+        buildConfigField "String","BLOCKCHAIN_TYPE", "\"$blockchainType\""
     }
     buildTypes {
         release {
@@ -35,15 +55,23 @@ android {
 
 sourceSets {
     main {
+        java.srcDirs = ['src/main/java/kr/co/lecle/aloxide','build/source/buildConfig/debug/com/.../BuildConfig.java']
+        resources.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
+
         java {
-            srcDirs 'src/main/java/kr/co/lecle/Main.java'
+//            srcDirs 'src/main/java/kr/co/lecle'
+        }
+        resources {
+            includes = ["**/*.properties"]
         }
     }
 }
 
-task aloxide(type: JavaExec) {
+
+
+task GET(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
-    main = "kr.co.lecle.aloxide.Main"
+    main = "kr.co.lecle.aloxide.GET"
 }
 
 dependencies {
@@ -57,16 +85,8 @@ dependencies {
     implementation 'foundation.icon:icon-sdk:1.0.0'
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
-//    implementation 'one.block:eosiojava:0.1.2'
-//    implementation 'one.block:eosiojavasoftkeysignatureprovider:0.1.3'
-//    implementation 'one.block:eosiojavaandroidabieosserializationprovider:0.1.1'
-//    implementation 'one.block:eosiojavarpcprovider:0.1.1'
-
-//    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
-//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
     implementation group: 'io.jafka', name: 'jeos', version: '0.9.15'
-//    implementation 'com.github.EOSEssentials:eos-java-rpc-wrapper:master'
 
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 

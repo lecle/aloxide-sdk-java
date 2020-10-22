@@ -1,8 +1,5 @@
 package kr.co.lecle.aloxide.service;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
@@ -64,20 +61,18 @@ public class EosNetworkService extends BlockchainNetwork {
         return result.getRows().get(0);
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressWarnings("unchecked")
     @Override
     public Object add(Object params) {
         String methodName = "cre" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        Map newMap = ((HashMap)params);
-        newMap.put("user",this.account.getName());
+        HashMap newMap = ((HashMap) params);
+        newMap.put("user", this.account.getName());
         AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private String sendTransaction(String from, String action, String transferData, String privateKey) {
         SignArg arg = eosApi.getSignArg(120);
 
@@ -91,7 +86,9 @@ public class EosNetworkService extends BlockchainNetwork {
 
         // ⑤ build the packed transaction
         PackedTransaction packedTransaction = new PackedTransaction();
-        packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
+//        }
         packedTransaction.setRefBlockNum(arg.getLastIrreversibleBlockNum());
         packedTransaction.setRefBlockPrefix(arg.getRefBlockPrefix());
 
@@ -109,19 +106,18 @@ public class EosNetworkService extends BlockchainNetwork {
         return pts.getTransactionId();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SuppressWarnings("unchecked")
     @Override
     public Object update(String id, Object params) {
         String methodName = "upd" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        Map newMap = ((HashMap)params);
-        newMap.put("user",this.account.getName());
+        HashMap newMap = ((HashMap) params);
+        newMap.put("user", this.account.getName());
         AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Object delete(String id) {
         String methodName = "del" + this.enityName;
@@ -133,10 +129,12 @@ public class EosNetworkService extends BlockchainNetwork {
         AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, d);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
+
     /**
      * Validation in EOS Network with the condition below:
      * - check the method name exist or not in ABI,...
      * - check non-null input: private key, account name, method is lower case
+     *
      * @return
      */
     @Override
