@@ -1,15 +1,34 @@
+
 apply plugin: 'com.android.application'
+///////////////// read the environment config
+def envProperties = new Properties()
+def envPropertiesFile = rootProject.file('env.properties')
+if (envPropertiesFile.exists()) {
+    envProperties.load(new FileInputStream(envPropertiesFile))
+}
 
 android {
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "kr.co.lecle.aloxide"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def accountName = envProperties.getProperty("app_blockchain_account")
+        def blockchain_contract = envProperties.getProperty("app_blockchain_contract")
+        def pk = envProperties.getProperty("app_blockchain_account_pk")
+        def url = envProperties.getProperty("app_blockchain_url")
+        def blockchainType = envProperties.getProperty("app_blockchain_type")
+
+        buildConfigField "String","BLOCKCHAIN_ACCOUNT", "\"$accountName\""
+        buildConfigField "String","BLOCKCHAIN_CONTRACT", "\"$blockchain_contract\""
+        buildConfigField "String","PRIVATIE_KEY","\"$pk\""
+        buildConfigField "String","BLOCKCHAIN_URL", "\"$url\""
+        buildConfigField "String","BLOCKCHAIN_TYPE", "\"$blockchainType\""
     }
     buildTypes {
         release {
@@ -21,19 +40,50 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude 'lib/x86_64/darwin/libscrypt.dylib'
+        exclude 'lib/x86_64/freebsd/libscrypt.so'
+        exclude 'lib/x86_64/linux/libscrypt.so'
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+
 }
 
 sourceSets {
     main {
-        java {
-            srcDirs 'src/main/java/kr/co/lecle/ICONTransactionManger.java'
-        }
+//        java.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
+//        resources.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
+//
+//        java {
+//            // srcDirs 'src/main/java/kr/co/lecle'
+//        }
+//        resources {
+//            includes = ["**/*.properties"]
+//        }
     }
 }
 
-task myRun(type: JavaExec) {
+
+
+task GET(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.GET"
     classpath sourceSets.main.runtimeClasspath
-    main = "kr.co.lecle.aloxide.ICONTransactionManager"
+}
+task ADD(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.ADD"
+    classpath sourceSets.main.runtimeClasspath
+}
+task DELETE(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.DELETE"
+    classpath sourceSets.main.runtimeClasspath
+}
+
+task UPDATE(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.UPDATE"
+    classpath sourceSets.main.runtimeClasspath
 }
 
 dependencies {
@@ -46,9 +96,10 @@ dependencies {
 
     implementation 'foundation.icon:icon-sdk:1.0.0'
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
 
-    implementation 'one.block:eosiojava:0.1.2'
-    implementation 'one.block:eosiojavasoftkeysignatureprovider:0.1.3'
-    implementation 'one.block:eosiojavaandroidabieosserializationprovider:0.1.1'
-    implementation 'one.block:eosiojavarpcprovider:0.1.1'
+    implementation group: 'io.jafka', name: 'jeos', version: '0.9.15'
+
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+
 }

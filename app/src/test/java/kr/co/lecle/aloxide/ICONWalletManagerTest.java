@@ -9,6 +9,8 @@ import java.security.NoSuchProviderException;
 import java.util.Map;
 
 import foundation.icon.icx.data.TransactionResult;
+import kr.co.lecle.aloxide.old.ICONTransactionManager;
+import kr.co.lecle.aloxide.old.ICONWalletManager;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -30,11 +32,7 @@ public class ICONWalletManagerTest {
             assertNotNull(prvKey);
 
 
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
             e.printStackTrace();
         }
     }

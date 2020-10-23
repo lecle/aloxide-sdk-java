@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package kr.co.lecle.aloxide.old;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import foundation.icon.icx.data.Bytes;
 /**
  * Created by quocb14005xx on 29,September,2020
  */
-class ICONWalletManager {
+public class ICONWalletManager {
     private static ICONWalletManager instance = null;
 
     private ICONWalletManager() {
@@ -28,7 +28,7 @@ class ICONWalletManager {
         return instance;
     }
 
-    Map<String, String> createWallet() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public Map<String, String> createWallet() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         KeyWallet wallet = KeyWallet.create();
         Map<String, String> output = new HashMap<>();
         output.put("private_key", wallet.getPrivateKey().toHexString(false));
@@ -36,7 +36,7 @@ class ICONWalletManager {
         return output;
     }
 
-    Map<String, String> getWalletByPrivateKey(String privateKey) {
+    public Map<String, String> getWalletByPrivateKey(String privateKey) {
         assert privateKey != null;
         Map<String, String> output = new HashMap<>();
         KeyWallet wallet = KeyWallet.load(new Bytes(privateKey));  // Load keyWallet with privateKey
@@ -45,12 +45,12 @@ class ICONWalletManager {
         return output;
     }
 
-    KeyWallet getWallet(String privateKey) {
+    public KeyWallet getWallet(String privateKey) {
         assert privateKey != null;
         return KeyWallet.load(new Bytes(privateKey));  // Load keyWallet with privateKey
     }
 
-    Map<String, String> getStoredWallet(String password, String filePath) throws IOException, KeystoreException {
+    public Map<String, String> getStoredWallet(String password, String filePath) throws IOException, KeystoreException {
         Map<String, String> output = new HashMap<>();
         KeyWallet wallet = KeyWallet.load(password, new File(filePath));  // Load keyWallet with privateKey
         output.put("private_key", wallet.getPrivateKey().toHexString(false));
@@ -58,7 +58,7 @@ class ICONWalletManager {
         return output;
     }
 
-    String storeTheWallet(String directoryPath, String password, KeyWallet wallet) throws IOException, KeystoreException {
+    public String storeTheWallet(String directoryPath, String password, KeyWallet wallet) throws IOException, KeystoreException {
         //TODO check permission before create file, or we just need to store the private key in the share preferences
         File destinationDirectory = new File(directoryPath);
         return KeyWallet.store(wallet, password, destinationDirectory);
