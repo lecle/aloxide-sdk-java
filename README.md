@@ -1,71 +1,113 @@
-## Installation
-1. Install envinronment:
+# Aloxide
 
-    - brew install gradle
-    
-    - brew install android-sdk
-2. Clone the repository [https://github.com/lecle/aloxide-sdk-java.git](https://github.com/lecle/aloxide-sdk-java.git).
+A wrapper class to read, write data to EOS/ICON Network
 
-3. Install dependencies: ./gradlew build
+## prerequisite
 
-# EOS Network for Java SDK 
-Wraper class from EOSIO Java SDK [https://github.com/EOSIO/eosio-java](https://github.com/EOSIO/eosio-java)
+JDK 11.0.8 [https://www.oracle.com/java/technologies/javase-jdk11-downloads.html](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+## Dependencies
 
-# Procedure
-**To add data to blockchain by running**
-```
-gradle add --args=Poll aloxidejs123 1996 “Test create Poll” “Body testing”
+Use the package manager [gradle](https://gradle.org/) to install.
+
+Use for EOS Network
+```gradle
+implementation group: 'io.jafka', name: 'jeos', version: '0.9.15'
 ```
 
-This command line to create a Poll with id=1996 name=Test create Poll and body=Body testing, the result is a transaction id (ex: c7387cf9102ae9fbbe5cb29b184a6a2cd2988a475db194eec38c3f6a77e4ed5a)
-
-The result will the same with JavaScript SDK above. Access to this url to verify the result: https://local.bloks.io/transaction/c7387cf9102ae9fbbe5cb29b184a6a2cd2988a475db194eec38c3f6a77e4ed5a?nodeUrl=history.testnet.canfoundation.io&coreSymbol=CAT&systemDomain=eosio
-
-![](images/Screenshot_2020-10-05_at_11.46.05.png)
-
-![](images/Screenshot_2020-10-05_at_11.48.53.png)
-
-**To update update existing data in blockchain, by running**
+Use for ICON Network
+```gradle
+implementation 'foundation.icon:icon-sdk:1.0.0'
+implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 ```
-gradle set --args=Poll aloxidejs123 1996 “Test create Poll updated” “Body testing updated”
-```
-
-![](images/Screenshot_2020-10-05_at_11.55.35.png)
-
-After we run this script the data will be changed, access this link to verify: https://local.bloks.io/transaction/ae29360ffa0dafb2cd57b1485c16a9a85695cfc572ab73e007f4010bf526ba30?nodeUrl=history.testnet.canfoundation.io&coreSymbol=CAT&systemDomain=eosio
-
-**To get data from blockchain, by running**
-```
-gradle get --agrs=1996
-```
-This command will get data value of the id from the Poll entity, the result is the current value of the Poll with id = 1996.
-
-In order to verify this feature, we can:
-- Go to the block explorer https://local.bloks.io/account/aloxidejs123?nodeUrl=history.testnet.canfoundation.io&coreSymbol=CAT&systemDomain=eosio.
-- Click to the Contract tab - Table section
-- See that the data in Table is the same with the data received when running script
-
-
-
-
-
-
-# ICON Network for Java SDK 
-Wraper class from Icon Java SDK [https://www.icondev.io/docs/java-sdk](https://www.icondev.io/docs/java-sdk)
 
 ## Usage
 
-Send ICX transaction
-
-Example: Send **11** ICX from **c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366** (Private key) to **hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea** (Address)
+**Blockchain account initialization**
+```java
+ BlockchainAccount bcAccount = new BlockchainAccount.BlockchainAccountBuilder()
+                .setName(/*your account name*/) // EOS network needed
+                .setPrivateKey(/*your private key*/) // EOS network needed
+                .setAddress(/*your address*/)// ICON network needed
+                .build();
 ```
-gradle myRun --args='c958108ccc79513ef9bf7647c29194199e3c5b86a88cbbc236dd5f74dfc37366  hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea 11'
+
+**Aloxide initialization**
+
+```java
+Aloxide poll = AloxideBuilder.newBuilder()
+                .setNetwork(Network.EOS)
+                .setUrl(/*your node url*/)
+                .setBlockchainAccount(/*your blockchain account information*/)
+                .setEnityName(/*your entity name*/)
+                .setContract(/*the contract*/)
+                .build();
+```
+
+```**These samples assume you deployed the SmartContract/SCORE like Poll{id, name, body}**```
+
+**To add new record to blockchain, by run**
+
+Example: Add new object `id=9999`, `name="NEW NAME"`, `body="NEW BODY"`. Return the Object dynamic you can use to cast/parse this result (`Poll poll = Poll.from(result);`).
+
+
+```java
+Map<String, String> d = new HashMap<>();
+d.put("id", "9999");
+d.put("name", "NEW NAME");
+d.put("body", "NEW BODY");
+Object result = poll.add(d);
+```
+**To get the record to blockchain by id, by run**
+
+Example: Get the object by `id=9999`.
+
+
+```java
+Map<String, String> d = new HashMap<>();
+Object result = poll.get("9999");
+```
+**To update the record to blockchain by id, by run**
+
+Example: Update the object by `id=9999` with new data `name="NEW NAME updated"`, `body="NEW BODY updated"`.
+
+
+```java
+Map<String, String> d = new HashMap<>();
+d.put("id", "9999");
+d.put("name", "NEW NAME updated");
+d.put("body", "NEW BODY updated");
+Object result = poll.update("9999", d);
+```
+
+**To delete the record to blockchain by id, by run**
+
+Example: Delete the object by `id=9999`.
+
+
+```java
+Map<String, String> d = new HashMap<>();
+Object result = poll.delete("9999");
 ```
 
 
-Access to the ICON testnet block explorer to verify value
-1. Go to this page [https://bicon.tracker.solidwallet.io/](https://bicon.tracker.solidwallet.io/)
-![](images/Screenshot_2020-09-30_at_15.03.14.png)
+### Example run with gradle in command line:
+:warning: **Edit `env.property` file to use Blockchain network you want**
 
-2. And the search bar: search the address `hx1f617adb52d49f65d60c48a3109fb0e7b3cd72ea`
-![](images/Screenshot_2020-10-01_at_15.20.13.png)
+To add, by run:
+```gradle
+gradle ADD --args= "Poll 123 Name Body"
+```
+
+To get, by run:
+```gradle
+gradle GET --args= "Poll 123"
+```
+To update, by run:
+```gradle
+gradle UPDATE --args= "Poll 123 Name Body"
+```
+
+To delete, by run:
+```gradle
+gradle DELETE --args= "Poll 123"
+```
