@@ -1,6 +1,8 @@
 package kr.co.lecle.aloxide;
 
 
+import java.util.HashMap;
+
 import kr.co.lecle.aloxide.model.BlockchainAccount;
 import kr.co.lecle.aloxide.service.BlockchainNetwork;
 import kr.co.lecle.aloxide.service.EosNetworkService;
@@ -24,12 +26,12 @@ class Aloxide implements AbsAloxideMethod {
     }
 
     @Override
-    public Object add(Object params) throws Exception {
+    public Object add(HashMap<String, Object> params) throws Exception {
         return this.blockchainNetwork.add(params);
     }
 
     @Override
-    public Object update(String id, Object params) throws Exception {
+    public Object update(String id, HashMap<String, Object> params) throws Exception {
         return this.blockchainNetwork.update(id, params);
     }
 

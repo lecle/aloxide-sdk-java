@@ -1,4 +1,3 @@
-import java.lang.reflect.Method
 
 apply plugin: 'com.android.application'
 ///////////////// read the environment config
@@ -13,7 +12,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "kr.co.lecle.aloxide"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -55,23 +54,36 @@ android {
 
 sourceSets {
     main {
-        java.srcDirs = ['src/main/java/kr/co/lecle/aloxide','build/source/buildConfig/debug/com/.../BuildConfig.java']
-        resources.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
-
-        java {
-//            srcDirs 'src/main/java/kr/co/lecle'
-        }
-        resources {
-            includes = ["**/*.properties"]
-        }
+//        java.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
+//        resources.srcDirs = ['src/main/java/kr/co/lecle/aloxide']
+//
+//        java {
+//            // srcDirs 'src/main/java/kr/co/lecle'
+//        }
+//        resources {
+//            includes = ["**/*.properties"]
+//        }
     }
 }
 
 
 
 task GET(type: JavaExec) {
-    classpath sourceSets.main.runtimeClasspath
     main = "kr.co.lecle.aloxide.GET"
+    classpath sourceSets.main.runtimeClasspath
+}
+task ADD(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.ADD"
+    classpath sourceSets.main.runtimeClasspath
+}
+task DELETE(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.DELETE"
+    classpath sourceSets.main.runtimeClasspath
+}
+
+task UPDATE(type: JavaExec) {
+    main = "kr.co.lecle.aloxide.UPDATE"
+    classpath sourceSets.main.runtimeClasspath
 }
 
 dependencies {

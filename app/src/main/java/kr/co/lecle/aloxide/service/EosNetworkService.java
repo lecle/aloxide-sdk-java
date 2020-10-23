@@ -1,6 +1,7 @@
 package kr.co.lecle.aloxide.service;
 
 
+
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,13 +64,12 @@ public class EosNetworkService extends BlockchainNetwork {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object add(Object params) {
+    public Object add(HashMap<String, Object> params) {
         String methodName = "cre" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        HashMap newMap = ((HashMap) params);
-        newMap.put("user", this.account.getName());
-        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
+        params.put("user", this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 
@@ -86,9 +86,9 @@ public class EosNetworkService extends BlockchainNetwork {
 
         // ⑤ build the packed transaction
         PackedTransaction packedTransaction = new PackedTransaction();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
-//        }
+
+        packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
+
         packedTransaction.setRefBlockNum(arg.getLastIrreversibleBlockNum());
         packedTransaction.setRefBlockPrefix(arg.getRefBlockPrefix());
 
@@ -108,13 +108,12 @@ public class EosNetworkService extends BlockchainNetwork {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object update(String id, Object params) {
+    public Object update(String id, HashMap<String, Object> params) {
         String methodName = "upd" + this.enityName;
         String privateKey = this.account.getPrivateKey();
         String from = this.account.getName();
-        HashMap newMap = ((HashMap) params);
-        newMap.put("user", this.account.getName());
-        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, newMap);
+        params.put("user", this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
         return sendTransaction(from, methodName, data.getBinargs(), privateKey);
     }
 

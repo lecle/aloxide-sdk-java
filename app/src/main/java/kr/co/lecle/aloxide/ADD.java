@@ -3,26 +3,29 @@ package kr.co.lecle.aloxide;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
-
 /**
- * Created by quocb14005xx on 22,October,2020
+ * Created by quocb14005xx on 23,October,2020
  */
-public class GET {
+public class ADD {
 
     public static void main(String[] args) {
-        System.out.println("[Aloxide JavaSDK]::::::GET");
+        System.out.println("[Aloxide JavaSDK]::::::ADD");
 
         if (args.length <= 1) {
-            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle GET --args=\"entity_name ID\"");
+            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle ADD --args=\"entity_name ID name body\"");
             return;
         }
 
         String id = args[1];
+        String name = args[2];
+        String body = args[3];
         String entityName = args[0];
 
-        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
+//        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
         File file = AloxideUtils.getEnvFile();
 
@@ -44,11 +47,15 @@ public class GET {
                 }
                 try {
 
-                    Object result = aloxide.get(id);
+                    HashMap<String, Object> d = new HashMap<>();
+                    d.put("id", id);
+                    d.put("name", name);
+                    d.put("body", body);
+                    Object result = aloxide.add(d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
-                    System.out.println(result);
+                    System.out.println("Transaction ID: " + result);
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");
                     System.out.println("\n\n\n\n\n");

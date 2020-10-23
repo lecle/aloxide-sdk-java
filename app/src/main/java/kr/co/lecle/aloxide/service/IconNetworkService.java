@@ -2,6 +2,8 @@ package kr.co.lecle.aloxide.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import foundation.icon.icx.Call;
@@ -94,11 +96,23 @@ public class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    public Object add(Object params) throws Exception {
+    public Object add(HashMap<String, Object> params) throws Exception {
         final String methodName = "cre" + this.enityName;
         boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
-        return sendTransaction(methodName, (RpcObject) params);
+        return sendTransaction(methodName, converter(params));
+    }
+
+    RpcObject converter(HashMap<String, Object> data) {
+        if (data == null) return null;
+        RpcObject.Builder params = new RpcObject.Builder();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            params.put(key, new RpcValue((String) value));
+        }
+
+        return params.build();
     }
 
     /**
@@ -110,11 +124,11 @@ public class IconNetworkService extends BlockchainNetwork {
      * @throws Exception
      */
     @Override
-    public Object update(String id, Object params) throws Exception {
+    public Object update(String id, HashMap<String, Object> params) throws Exception {
         final String methodName = "upd" + this.enityName;
         boolean valid = this.validate();
         if (!valid) throw new Exception("The method name " + methodName + " is not valid!");
-        return sendTransaction(methodName, (RpcObject) params);
+        return sendTransaction(methodName, converter(params));
     }
 
     /**
