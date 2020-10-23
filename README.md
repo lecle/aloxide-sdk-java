@@ -96,11 +96,24 @@ Object result = poll.delete("9999");
 To add, by run:
 ```gradle
 gradle ADD --args= "Poll 123 Name Body"
+
+output:
+--------------- YOUR RESULT HERE ---------------
+Transaction ID: 0x927374a3f208b1a5640b9a12fceeee562925135d6c4c1aac5aba44744b837f4b
+Check information: https://bicon.net.solidwallet.io/transaction/0x927374a3f208b1a5640b9a12fceeee562925135d6c4c1aac5aba44744b837f4b
+------------------------------------------------
+
 ```
 
 To get, by run:
 ```gradle
 gradle GET --args= "Poll 123"
+
+output:
+--------------- YOUR RESULT HERE ---------------
+{"id":"123","name":"Name","body":"Body"}
+------------------------------------------------
+
 ```
 To update, by run:
 ```gradle
