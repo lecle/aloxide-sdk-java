@@ -37,6 +37,7 @@ public class UPDATE {
                 String pk = properties.getProperty("app_blockchain_account_pk");
                 String url = properties.getProperty("app_blockchain_url");
                 String blockchainType = properties.getProperty("app_blockchain_type");
+                String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
                 if (blockchainType.contains("eos")) {
@@ -45,16 +46,16 @@ public class UPDATE {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);
                 }
                 try {
-
                     HashMap<String, Object> d = new HashMap<>();
                     d.put("id", id);
                     d.put("name", name);
                     d.put("body", body);
-                    Object result = aloxide.update(id,d);
+                    Object result = aloxide.update(id, d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
                     System.out.println("Transaction ID: " + result);
+                    System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");
                     System.out.println("\n\n\n\n\n");

@@ -17,18 +17,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        def accountName = envProperties.getProperty("app_blockchain_account")
-        def blockchain_contract = envProperties.getProperty("app_blockchain_contract")
-        def pk = envProperties.getProperty("app_blockchain_account_pk")
-        def url = envProperties.getProperty("app_blockchain_url")
-        def blockchainType = envProperties.getProperty("app_blockchain_type")
-
-        buildConfigField "String","BLOCKCHAIN_ACCOUNT", "\"$accountName\""
-        buildConfigField "String","BLOCKCHAIN_CONTRACT", "\"$blockchain_contract\""
-        buildConfigField "String","PRIVATIE_KEY","\"$pk\""
-        buildConfigField "String","BLOCKCHAIN_URL", "\"$url\""
-        buildConfigField "String","BLOCKCHAIN_TYPE", "\"$blockchainType\""
+//
+//        def accountName = envProperties.getProperty("app_blockchain_account")
+//        def blockchain_contract = envProperties.getProperty("app_blockchain_contract")
+//        def pk = envProperties.getProperty("app_blockchain_account_pk")
+//        def url = envProperties.getProperty("app_blockchain_url")
+//        def blockchainType = envProperties.getProperty("app_blockchain_type")
+//
+//        buildConfigField "String","BLOCKCHAIN_ACCOUNT", "\"$accountName\""
+//        buildConfigField "String","BLOCKCHAIN_CONTRACT", "\"$blockchain_contract\""
+//        buildConfigField "String","PRIVATIE_KEY","\"$pk\""
+//        buildConfigField "String","BLOCKCHAIN_URL", "\"$url\""
+//        buildConfigField "String","BLOCKCHAIN_TYPE", "\"$blockchainType\""
     }
     buildTypes {
         release {
@@ -98,7 +98,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
 
-    implementation group: 'io.jafka', name: 'jeos', version: '0.9.15'
+    implementation group: 'io.jafka', name: 'jeos', version: '0.9.16'
 
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 

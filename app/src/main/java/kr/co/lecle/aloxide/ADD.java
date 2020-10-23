@@ -38,6 +38,7 @@ public class ADD {
                 String pk = properties.getProperty("app_blockchain_account_pk");
                 String url = properties.getProperty("app_blockchain_url");
                 String blockchainType = properties.getProperty("app_blockchain_type");
+                String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
                 if (blockchainType.contains("eos")) {
@@ -53,12 +54,16 @@ public class ADD {
                     d.put("body", body);
                     Object result = aloxide.add(d);
                     System.out.println("\n\n\n\n\n");
-                    System.out.println("--------------- YOUR RESULT HERE ---------------");
-                    System.out.println("================================================");
+                    System.out.println("*************** YOUR RESULT HERE **************");
+                    System.out.println("***********************************************");
+                    System.out.println("***********************************************");
+                    System.out.println("***********************************************");
                     System.out.println("Transaction ID: " + result);
+                    System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
-                    System.out.println("------------------------------------------------");
-                    System.out.println("\n\n\n\n\n");
+                    System.out.println("***********************************************");
+                    System.out.println("***********************************************");
+                    System.out.println("\n\n");
 
                 } catch (Exception e) {
                     e.printStackTrace();

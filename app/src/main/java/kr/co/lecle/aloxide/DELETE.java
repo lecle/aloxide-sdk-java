@@ -35,6 +35,7 @@ public class DELETE {
                 String pk = properties.getProperty("app_blockchain_account_pk");
                 String url = properties.getProperty("app_blockchain_url");
                 String blockchainType = properties.getProperty("app_blockchain_type");
+                String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
                 if (blockchainType.contains("eos")) {
@@ -49,6 +50,7 @@ public class DELETE {
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
                     System.out.println(result);
+                    System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");
                     System.out.println("\n\n\n\n\n");
