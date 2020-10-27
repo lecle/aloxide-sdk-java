@@ -13,20 +13,41 @@ public class UPDATE {
 
     public static void main(String[] args) {
         System.out.println("[Aloxide JavaSDK]::::::UPDATE");
+        File file = AloxideUtils.getEnvFile();
 
         if (args.length <= 1) {
             System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle UPDATE --args=\"entity_name ID name body\"");
             return;
         }
 
-        String id = args[1];
-        String name = args[2];
-        String body = args[3];
-        String entityName = args[0];
+        String id = null;
+        String name = null;
+        String body = null;
+        String entityName = null;
+        try {
+            id = args[1];
+
+        } catch (Exception ignored) {
+
+        }
+        try {
+            name = args[2];
+        } catch (Exception ignored) {
+
+        }
+        try {
+            body = args[3];
+        } catch (Exception ignored) {
+
+        }
+        try {
+            entityName = args[0];
+        } catch (Exception ignored) {
+
+        }
 
 //        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
-        File file = AloxideUtils.getEnvFile();
 
         if (file.exists()) {
             try {
@@ -54,7 +75,7 @@ public class UPDATE {
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
-                    System.out.println("Transaction ID: " + result);
+                    System.out.println("Transaction ID: " + result + "\n");
                     System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");

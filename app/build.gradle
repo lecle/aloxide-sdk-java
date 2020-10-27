@@ -96,7 +96,7 @@ dependencies {
 
     implementation 'foundation.icon:icon-sdk:1.0.0'
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.64'
 
     implementation group: 'io.jafka', name: 'jeos', version: '0.9.16'
 

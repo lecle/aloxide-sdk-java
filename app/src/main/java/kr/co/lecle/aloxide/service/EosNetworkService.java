@@ -1,6 +1,8 @@
 package kr.co.lecle.aloxide.service;
 
 
+import org.apache.log4j.BasicConfigurator;
+
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,6 +44,8 @@ public class EosNetworkService extends BlockchainNetwork {
         this.contract = contract;
         this.url = url;
         eosApi = EosApiFactory.create(this.url);
+        BasicConfigurator.configure();
+
     }
 
 

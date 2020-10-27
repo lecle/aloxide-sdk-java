@@ -20,10 +20,31 @@ public class ADD {
             return;
         }
 
-        String id = args[1];
-        String name = args[2];
-        String body = args[3];
-        String entityName = args[0];
+        String id = null;
+        String name=null;
+        String body= null;
+        String entityName= null;
+        try{
+            id = args[1];
+
+        }catch (Exception ignored){
+
+        }
+        try{
+            name = args[2];
+        }catch (Exception ignored){
+
+        }
+        try{
+            body = args[3];
+        }catch (Exception ignored){
+
+        }
+        try{
+            entityName = args[0];
+        }catch (Exception ignored){
+
+        }
 
 //        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
@@ -58,7 +79,7 @@ public class ADD {
                     System.out.println("***********************************************");
                     System.out.println("***********************************************");
                     System.out.println("***********************************************");
-                    System.out.println("Transaction ID: " + result);
+                    System.out.println("Transaction ID: " + result + "\n");
                     System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("***********************************************");

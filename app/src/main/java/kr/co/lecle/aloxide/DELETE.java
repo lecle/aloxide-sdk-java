@@ -49,7 +49,7 @@ public class DELETE {
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
-                    System.out.println(result);
+                    System.out.println("Transaction ID: " +result+"\n");
                     System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");
