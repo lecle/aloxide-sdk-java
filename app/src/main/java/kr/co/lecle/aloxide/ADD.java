@@ -3,6 +3,7 @@ package kr.co.lecle.aloxide;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -20,30 +21,32 @@ public class ADD {
             return;
         }
 
-        String id = null;
-        String name=null;
-        String body= null;
-        String entityName= null;
-        try{
-            id = args[1];
+//        String[] aargs = new String[10];
+//        aargs[0] = "Poll";
+//        aargs[1] = "674";
+//        aargs[2] = "sau bay bon";
+//        aargs[3] = "sau bay bon";
 
-        }catch (Exception ignored){
+        String entityName = null;
+        HashMap<String, Object> d = new HashMap<>();
 
-        }
-        try{
-            name = args[2];
-        }catch (Exception ignored){
-
-        }
-        try{
-            body = args[3];
-        }catch (Exception ignored){
-
-        }
-        try{
+        try {
             entityName = args[0];
-        }catch (Exception ignored){
-
+            if (entityName == null) {
+                System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle ADD --args=\"entity_name ID name body\"");
+                return;
+            }
+            String[] colums;
+            if (entityName.toLowerCase().contains("poll")) {
+                colums = AloxideUtils.pollColums;
+            } else {
+                colums = AloxideUtils.voteColums;
+            }
+            for (int i = 0; i < colums.length; i++) {
+                d.put(colums[i], args[i + 1]);
+            }
+            System.out.println(d);
+        } catch (Exception ignored) {
         }
 
 //        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
@@ -69,10 +72,10 @@ public class ADD {
                 }
                 try {
 
-                    HashMap<String, Object> d = new HashMap<>();
-                    d.put("id", id);
-                    d.put("name", name);
-                    d.put("body", body);
+//                    HashMap<String, Object> d = new HashMap<>();
+//                    d.put("id", id);
+//                    d.put("name", name);
+//                    d.put("body", body);
                     Object result = aloxide.add(d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("*************** YOUR RESULT HERE **************");

@@ -20,31 +20,29 @@ public class UPDATE {
             return;
         }
 
-        String id = null;
-        String name = null;
-        String body = null;
         String entityName = null;
-        try {
-            id = args[1];
 
-        } catch (Exception ignored) {
+        HashMap<String, Object> d = new HashMap<>();
 
-        }
-        try {
-            name = args[2];
-        } catch (Exception ignored) {
-
-        }
-        try {
-            body = args[3];
-        } catch (Exception ignored) {
-
-        }
         try {
             entityName = args[0];
+            if (entityName == null) {
+                System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle ADD --args=\"entity_name ID name body\"");
+                return;
+            }
+            String[] colums;
+            if (entityName.toLowerCase().contains("poll")) {
+                colums = AloxideUtils.pollColums;
+            } else {
+                colums = AloxideUtils.voteColums;
+            }
+            for (int i = 0; i < colums.length; i++) {
+                d.put(colums[i], args[i + 1]);
+            }
+            System.out.println(d);
         } catch (Exception ignored) {
-
         }
+
 
 //        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
@@ -67,11 +65,11 @@ public class UPDATE {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);
                 }
                 try {
-                    HashMap<String, Object> d = new HashMap<>();
-                    d.put("id", id);
-                    d.put("name", name);
-                    d.put("body", body);
-                    Object result = aloxide.update(id, d);
+//                    HashMap<String, Object> d = new HashMap<>();
+//                    d.put("id", id);
+//                    d.put("name", name);
+//                    d.put("body", body);
+                    Object result = aloxide.update((String) d.get("id"), d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
