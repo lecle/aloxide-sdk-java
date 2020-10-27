@@ -1,7 +1,6 @@
 package kr.co.lecle.aloxide.service;
 
 
-
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,8 +57,11 @@ public class EosNetworkService extends BlockchainNetwork {
         assert eosApi != null;
         TableRow result = getTableRows(this.account.getName(), this.contract, this.enityName,
                 id.toString(), id.toString(), "1");
-
-        return result.getRows().get(0);
+        if (result.getRows().size() > 0) {
+            return result.getRows().get(0);
+        } else {
+            return "Not found";
+        }
     }
 
     @SuppressWarnings("unchecked")

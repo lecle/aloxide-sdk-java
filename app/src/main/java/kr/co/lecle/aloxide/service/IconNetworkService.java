@@ -83,8 +83,7 @@ public class IconNetworkService extends BlockchainNetwork {
             RpcItem res = request.execute();
             return res;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+            return "Not found";
         }
     }
 

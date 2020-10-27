@@ -14,13 +14,16 @@ public class GET {
     public static void main(String[] args) {
         System.out.println("[Aloxide JavaSDK]::::::GET");
 
-        if (args.length <= 1) {
-            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle GET --args=\"entity_name ID\"");
-            return;
-        }
+//        if (args.length <= 1) {
+//            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle GET --args=\"entity_name ID\"");
+//            return;
+//        }
 
-        String id = args[1];
-        String entityName = args[0];
+//        String id = args[1];
+//        String entityName = args[0];
+
+        String id = "00494";
+        String entityName = "Poll";
 
         System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
