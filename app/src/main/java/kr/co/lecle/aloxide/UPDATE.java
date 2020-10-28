@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
+
+import kr.co.lecle.aloxide.model.Field;
+import kr.co.lecle.aloxide.model.FieldDetail;
 
 /**
  * Created by quocb14005xx on 23,October,2020
@@ -16,36 +20,12 @@ public class UPDATE {
         File file = AloxideUtils.getEnvFile();
 
         if (args.length <= 1) {
-            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle UPDATE --args=\"entity_name ID name body\"");
+            System.out.println("Please provide the required fields");
             return;
         }
 
-        String entityName = null;
-
+        String entityName = args[0];
         HashMap<String, Object> d = new HashMap<>();
-
-        try {
-            entityName = args[0];
-            if (entityName == null) {
-                System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle ADD --args=\"entity_name ID name body\"");
-                return;
-            }
-            String[] colums;
-            if (entityName.toLowerCase().contains("poll")) {
-                colums = AloxideUtils.pollColums;
-            } else {
-                colums = AloxideUtils.voteColums;
-            }
-            for (int i = 0; i < colums.length; i++) {
-                d.put(colums[i], args[i + 1]);
-            }
-            System.out.println(d);
-        } catch (Exception ignored) {
-        }
-
-
-//        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
-
 
         if (file.exists()) {
             try {
@@ -64,11 +44,43 @@ public class UPDATE {
                 } else {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);
                 }
+
                 try {
-//                    HashMap<String, Object> d = new HashMap<>();
-//                    d.put("id", id);
-//                    d.put("name", name);
-//                    d.put("body", body);
+                    String method = "upd" + entityName.toLowerCase();
+                    List<Field> fields = aloxide.getFields();
+                    for (int i = 0; i < fields.size(); i++) {
+                        if (fields.get(i).getName().equals(method)) {
+                            int sizeOfFields = fields.get(i).getFields().size();
+                            if (blockchainType.contains("eos")) {
+                                sizeOfFields--;
+                            }
+
+                            StringBuilder f = new StringBuilder();
+
+                            for (int j = 0; j < sizeOfFields; j++) {
+                                FieldDetail fieldDetail = fields.get(i).getFields().get(j);
+                                f.append(fieldDetail.getName()).append(", ");
+                            }
+
+                            if (sizeOfFields != args.length - 1) {
+                                System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
+                                return;
+                            }
+                            for (int j = 0; j < sizeOfFields; j++) {
+                                FieldDetail fieldDetail = fields.get(i).getFields().get(j);
+                                d.put(fieldDetail.getName(), args[j + 1]);
+                            }
+                            break;
+                        }
+                    }
+
+
+                } catch (Exception e) {
+                    System.out.println("Error while map data: " + e.getMessage());
+                    return;
+                }
+
+                try {
                     Object result = aloxide.update((String) d.get("id"), d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");

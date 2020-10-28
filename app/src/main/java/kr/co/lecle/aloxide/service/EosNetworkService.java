@@ -4,6 +4,7 @@ package kr.co.lecle.aloxide.service;
 import org.apache.log4j.BasicConfigurator;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,12 +21,16 @@ import io.jafka.jeos.core.common.transaction.TransactionAuthorization;
 import io.jafka.jeos.core.request.chain.transaction.PushTransactionRequest;
 import io.jafka.jeos.core.response.chain.AbiJsonToBin;
 import io.jafka.jeos.core.response.chain.TableRow;
+import io.jafka.jeos.core.response.chain.abi.Abi;
+import io.jafka.jeos.core.response.chain.code.Struct;
 import io.jafka.jeos.core.response.chain.transaction.PushedTransaction;
 import io.jafka.jeos.impl.EosApiServiceGenerator;
 import io.jafka.jeos.impl.EosChainApiService;
 import io.jafka.jeos.util.KeyUtil;
 import io.jafka.jeos.util.Raw;
 import kr.co.lecle.aloxide.model.BlockchainAccount;
+import kr.co.lecle.aloxide.model.Field;
+import kr.co.lecle.aloxide.model.FieldDetail;
 
 /**
  * Created by quocb14005xx on 12,October,2020
@@ -45,9 +50,36 @@ public class EosNetworkService extends BlockchainNetwork {
         this.url = url;
         eosApi = EosApiFactory.create(this.url);
         BasicConfigurator.configure();
-
     }
 
+    @Override
+    public List<Field> getFields() throws Exception {
+        return getAbi();
+    }
+
+    public List<Field> getAbi() {
+        Abi result = eosApi.getAbi(this.account.getName());
+        List<Struct> structs = result.getAbi().getStructs();
+        List<Field> output = new ArrayList<>();
+        for (int i = 0; i < structs.size(); i++) {
+            /// Struct
+            Struct struct = structs.get(i);
+            /// number of field in Struct
+            int size = struct.getFields().size();
+            List<FieldDetail> fieldDetails = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                FieldDetail fieldDetail = new FieldDetail();
+                fieldDetail.setName(struct.getFields().get(j).getName());
+                fieldDetail.setType(struct.getFields().get(j).getType());
+                fieldDetails.add(fieldDetail);
+            }
+            Field field = new Field();
+            field.setName(struct.getName());
+            field.setFields(fieldDetails);
+            output.add(field);
+        }
+        return output;
+    }
 
     /**
      * @param id
@@ -68,7 +100,6 @@ public class EosNetworkService extends BlockchainNetwork {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object add(HashMap<String, Object> params) {
         String methodName = "cre" + this.enityName;
@@ -82,15 +113,15 @@ public class EosNetworkService extends BlockchainNetwork {
     private String sendTransaction(String from, String action, String transferData, String privateKey) {
         SignArg arg = eosApi.getSignArg(120);
 
-        // ③ create the authorization
+        // create the authorization
         List<TransactionAuthorization> authorizations = Collections.singletonList(new TransactionAuthorization(from, "active"));
 
-        // ④ build the all actions
+        // build the all actions
         List<TransactionAction> actions = Collections.singletonList(//
                 new TransactionAction(this.account.getName(), action, authorizations, transferData)//
         );
 
-        // ⑤ build the packed transaction
+        // build the packed transaction
         PackedTransaction packedTransaction = new PackedTransaction();
 
         packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
@@ -112,7 +143,6 @@ public class EosNetworkService extends BlockchainNetwork {
         return pts.getTransactionId();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object update(String id, HashMap<String, Object> params) {
         String methodName = "upd" + this.enityName;

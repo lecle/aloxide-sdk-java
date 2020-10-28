@@ -56,24 +56,4 @@ public class AloxideUtils {
     }
     static String[] pollColums = new String[]{"id", "name", "body"};
     static String[] voteColums = new String[]{"id", "pollId", "ownerId","point"};
-
-
-    public static HashMap<String, Object> createHashMap(String entity) {
-        if (entity.toLowerCase().contains("vote")) {
-            HashMap<String, Object> voteMap = new HashMap<>();
-            voteMap.put("id", null);
-            voteMap.put("pollId", null);
-            voteMap.put("ownerId", null);
-            voteMap.put("point", null);
-            return voteMap;
-        }
-        if (entity.toLowerCase().contains("poll")) {
-            HashMap<String, Object> pollMap = new HashMap<>();
-            pollMap.put("id", null);
-            pollMap.put("name", null);
-            pollMap.put("body", null);
-            return pollMap;
-        }
-        return null;
-    }
 }
