@@ -100,7 +100,7 @@ gradle ADD --args= "Poll 123 Name Body"
 output:
 --------------- YOUR RESULT HERE ---------------
 Transaction ID: 0x927374a3f208b1a5640b9a12fceeee562925135d6c4c1aac5aba44744b837f4b
-Check information: https://bicon.net.solidwallet.io/transaction/0x927374a3f208b1a5640b9a12fceeee562925135d6c4c1aac5aba44744b837f4b
+Check information: https://bicon.tracker.solidwallet.io/transaction/0x927374a3f208b1a5640b9a12fceeee562925135d6c4c1aac5aba44744b837f4b
 ------------------------------------------------
 
 ```
