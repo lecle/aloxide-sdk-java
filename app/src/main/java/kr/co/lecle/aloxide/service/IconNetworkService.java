@@ -2,7 +2,9 @@ package kr.co.lecle.aloxide.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -14,11 +16,14 @@ import foundation.icon.icx.Transaction;
 import foundation.icon.icx.TransactionBuilder;
 import foundation.icon.icx.data.Address;
 import foundation.icon.icx.data.Bytes;
+import foundation.icon.icx.data.ScoreApi;
 import foundation.icon.icx.transport.http.HttpProvider;
 import foundation.icon.icx.transport.jsonrpc.RpcItem;
 import foundation.icon.icx.transport.jsonrpc.RpcObject;
 import foundation.icon.icx.transport.jsonrpc.RpcValue;
 import kr.co.lecle.aloxide.model.BlockchainAccount;
+import kr.co.lecle.aloxide.model.Field;
+import kr.co.lecle.aloxide.model.FieldDetail;
 import kr.co.lecle.aloxide.old.ICONWalletManager;
 import okhttp3.OkHttpClient;
 
@@ -53,6 +58,41 @@ public class IconNetworkService extends BlockchainNetwork {
         if (networkId != null) {
             this.nId = networkId;
         }
+
+    }
+
+    @Override
+    public List<Field> getFields() {
+        return getScore();
+    }
+
+    public List<Field> getScore() {
+        Request<List<ScoreApi>> request = iconService.getScoreApi(new Address(this.contract));
+        try {
+            List<ScoreApi> scoreApiList = request.execute();
+            List<Field> output = new ArrayList<>();
+            for (int i = 0; i < scoreApiList.size(); i++) {
+                /// Struct
+                ScoreApi struct = scoreApiList.get(i);
+                /// number of field in Struct
+                int size = struct.getInputs().size();
+                List<FieldDetail> fieldDetails = new ArrayList<>();
+                for (int j = 0; j < size; j++) {
+                    FieldDetail fieldDetail = new FieldDetail();
+                    fieldDetail.setName(struct.getInputs().get(j).getName());
+                    fieldDetail.setType(struct.getInputs().get(j).getType());
+                    fieldDetails.add(fieldDetail);
+                }
+                Field field = new Field();
+                field.setName(struct.getName());
+                field.setFields(fieldDetails);
+                output.add(field);
+            }
+            return output;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return new ArrayList<>();
     }
 
     /**

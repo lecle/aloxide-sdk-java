@@ -2,8 +2,10 @@ package kr.co.lecle.aloxide;
 
 
 import java.util.HashMap;
+import java.util.List;
 
 import kr.co.lecle.aloxide.model.BlockchainAccount;
+import kr.co.lecle.aloxide.model.Field;
 import kr.co.lecle.aloxide.service.BlockchainNetwork;
 import kr.co.lecle.aloxide.service.EosNetworkService;
 import kr.co.lecle.aloxide.service.IconNetworkService;
@@ -38,6 +40,11 @@ class Aloxide implements AbsAloxideMethod {
     @Override
     public Object delete(String id) throws Exception {
         return this.blockchainNetwork.delete(id);
+    }
+
+    @Override
+    public List<Field> getFields() throws Exception {
+        return this.blockchainNetwork.getFields();
     }
 }
 
