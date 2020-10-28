@@ -127,3 +127,7 @@ Example: Delete the object by `id=9999`.
 Map<String, String> d = new HashMap<>();
 Object result = poll.delete("9999");
 ```
+
+# License
+
+[Apache License 2.0](./LICENSE)
