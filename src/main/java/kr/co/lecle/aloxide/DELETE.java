@@ -38,7 +38,7 @@ public class DELETE {
                 String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
-                if (blockchainType.contains("eos")) {
+                if (blockchainType.contains("eos") || blockchainType.contains("can")) {
                     aloxide = AloxideUtils.handleEosNetwork(accountName, pk, url, entityName, blockchain_contract);
                 } else {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);

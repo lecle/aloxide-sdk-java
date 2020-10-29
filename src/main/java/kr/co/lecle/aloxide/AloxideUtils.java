@@ -48,11 +48,14 @@ public class AloxideUtils {
         String output;
         if (network == Network.EOS) {
             output = "https://local.bloks.io/transaction/" + transactionId + "?nodeUrl=history." + host;
+        } else if (network == Network.CAN) {
+            output = " https://jungle3.bloks.io/transaction/" + transactionId;
         } else {
             output = host + "/transaction/" + transactionId;
         }
         return output;
     }
+
     static String[] pollColums = new String[]{"id", "name", "body"};
-    static String[] voteColums = new String[]{"id", "pollId", "ownerId","point"};
+    static String[] voteColums = new String[]{"id", "pollId", "ownerId", "point"};
 }

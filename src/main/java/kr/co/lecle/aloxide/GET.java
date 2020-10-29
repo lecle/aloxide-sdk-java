@@ -39,7 +39,7 @@ public class GET {
                 String blockchainType = properties.getProperty("app_blockchain_type");
 
                 Aloxide aloxide;
-                if (blockchainType.contains("eos")) {
+                if (blockchainType.contains("eos") || blockchainType.contains("can")) {
                     aloxide = AloxideUtils.handleEosNetwork(accountName, pk, url, entityName, blockchain_contract);
                 } else {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);

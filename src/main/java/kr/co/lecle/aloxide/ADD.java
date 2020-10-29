@@ -43,7 +43,7 @@ public class ADD {
 
                 Aloxide aloxide;
 
-                if (blockchainType.contains("eos")) {
+                if (blockchainType.contains("eos") || blockchainType.contains("can")) {
                     aloxide = AloxideUtils.handleEosNetwork(accountName, pk, url, entityName, blockchain_contract);
                 } else {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);
@@ -64,8 +64,9 @@ public class ADD {
                                 FieldDetail fieldDetail = fields.get(i).getFields().get(j);
                                 f.append(fieldDetail.getName()).append(", ");
                             }
+                            System.out.println("arrr: " + f.toString());
 
-                            if (blockchainType.contains("eos")) {
+                            if (blockchainType.contains("eos") || blockchainType.contains("can")) {
                                 if (sizeOfFields - 1 != args.length - 1) {
                                     System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
                                     return;
@@ -80,7 +81,12 @@ public class ADD {
                             for (int j = 0; j < sizeOfFields; j++) {
                                 FieldDetail fieldDetail = fields.get(i).getFields().get(j);
                                 if (!fieldDetail.getName().equals("user")) {
-                                    d.put(fieldDetail.getName(), args[j]);
+                                    if (blockchainType.contains("icon")) {
+                                        d.put(fieldDetail.getName(), args[j + 1]);
+                                    } else {
+                                        d.put(fieldDetail.getName(), args[j]);
+                                    }
+
                                 }
                             }
                             break;
@@ -94,6 +100,7 @@ public class ADD {
                 }
 
                 try {
+                    System.out.println("passs: " + d);
                     Object result = aloxide.add(d);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("*************** YOUR RESULT HERE **************");

@@ -14,7 +14,7 @@ import kr.co.lecle.aloxide.service.IconNetworkService;
  * Created by quocb14005xx on 12,October,2020
  */
 enum Network {
-    EOS, ICON
+    EOS, ICON, CAN
 }
 
 class Aloxide implements AbsAloxideMethod {

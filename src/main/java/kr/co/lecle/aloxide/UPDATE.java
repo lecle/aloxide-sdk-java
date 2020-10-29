@@ -39,7 +39,7 @@ public class UPDATE {
                 String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
-                if (blockchainType.contains("eos")) {
+                if (blockchainType.contains("eos")  ||blockchainType.contains("can")) {
                     aloxide = AloxideUtils.handleEosNetwork(accountName, pk, url, entityName, blockchain_contract);
                 } else {
                     aloxide = AloxideUtils.handleIconNetwork(accountName, pk, url, entityName, blockchain_contract);
@@ -62,7 +62,7 @@ public class UPDATE {
                                 f.append(fieldDetail.getName()).append(", ");
                             }
 
-                            if (blockchainType.contains("eos")) {
+                            if (blockchainType.contains("eos") ||blockchainType.contains("can")) {
                                 if (sizeOfFields - 1 != args.length - 1) {
                                     System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
                                     return;
@@ -76,7 +76,12 @@ public class UPDATE {
                             for (int j = 0; j < sizeOfFields; j++) {
                                 FieldDetail fieldDetail = fields.get(i).getFields().get(j);
                                 if (!fieldDetail.getName().equals("user")) {
-                                    d.put(fieldDetail.getName(), args[j]);
+                                    if (blockchainType.contains("icon")) {
+                                        d.put(fieldDetail.getName(), args[j + 1]);
+                                    } else {
+                                        d.put(fieldDetail.getName(), args[j]);
+                                    }
+
                                 }
                             }
                             break;
