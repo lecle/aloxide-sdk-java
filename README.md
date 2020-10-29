@@ -8,11 +8,8 @@ A wrapper class to read, write data to EOS/ICON Network
 
 - Use the package manager [gradle](https://gradle.org/).
 
-:grey_exclamation: Recommend: install Android Studio IDE which includes `gradle` and `jdk` inside
-
-
 ### Example run with gradle in command line:
-:warning: **Edit `env.property` file to use Blockchain network you want**
+:warning: **Edit [env.property](./aloxide-sdk-java-gradle/env.properties) file to use Blockchain network you want**
 
 To add, by run:
 ```gradle
