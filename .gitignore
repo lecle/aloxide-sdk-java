@@ -3,3 +3,19 @@
 /local.properties
 # Ignore Gradle build output directory
 build
+=======
+*.iml
+.gradle
+.idea
+/.idea
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx

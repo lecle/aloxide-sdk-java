@@ -68,3 +68,4 @@ application {
     // Define the main class for the application.
     mainClassName = 'kr.co.lecle.aloxide.App'
 }
+
