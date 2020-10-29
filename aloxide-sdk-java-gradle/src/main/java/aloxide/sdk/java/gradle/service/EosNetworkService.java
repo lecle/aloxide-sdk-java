@@ -1,0 +1,220 @@
+package aloxide.sdk.java.gradle.service;
+
+
+import org.apache.log4j.BasicConfigurator;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import aloxide.sdk.java.gradle.model.BlockchainAccount;
+import aloxide.sdk.java.gradle.model.Field;
+import aloxide.sdk.java.gradle.model.FieldDetail;
+import io.jafka.jeos.EosApi;
+import io.jafka.jeos.EosApiFactory;
+import io.jafka.jeos.convert.Packer;
+import io.jafka.jeos.core.common.SignArg;
+import io.jafka.jeos.core.common.transaction.PackedTransaction;
+import io.jafka.jeos.core.common.transaction.TransactionAction;
+import io.jafka.jeos.core.common.transaction.TransactionAuthorization;
+import io.jafka.jeos.core.request.chain.transaction.PushTransactionRequest;
+import io.jafka.jeos.core.response.chain.AbiJsonToBin;
+import io.jafka.jeos.core.response.chain.TableRow;
+import io.jafka.jeos.core.response.chain.abi.Abi;
+import io.jafka.jeos.core.response.chain.code.Struct;
+import io.jafka.jeos.core.response.chain.transaction.PushedTransaction;
+import io.jafka.jeos.impl.EosApiServiceGenerator;
+import io.jafka.jeos.impl.EosChainApiService;
+import io.jafka.jeos.util.KeyUtil;
+import io.jafka.jeos.util.Raw;
+
+/**
+ * Created by quocb14005xx on 12,October,2020
+ * "https://testnet.canfoundation.io"
+ */
+public class EosNetworkService extends BlockchainNetwork {
+    private String enityName;
+    private String contract;
+    private String url;
+    private BlockchainAccount account;
+    private EosApi eosApi;
+
+    public EosNetworkService(String entityName, BlockchainAccount account, String contract, String url) {
+        this.enityName = entityName;
+        this.account = account;
+        this.contract = contract;
+        this.url = url;
+        eosApi = EosApiFactory.create(this.url);
+        BasicConfigurator.configure();
+    }
+
+    @Override
+    public List<Field> getFields() throws Exception {
+        return getAbi();
+    }
+
+    public List<Field> getAbi() {
+        Abi result = eosApi.getAbi(this.account.getName());
+        List<Struct> structs = result.getAbi().getStructs();
+        List<Field> output = new ArrayList<>();
+        for (int i = 0; i < structs.size(); i++) {
+            /// Struct
+            Struct struct = structs.get(i);
+            /// number of field in Struct
+            int size = struct.getFields().size();
+            List<FieldDetail> fieldDetails = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                FieldDetail fieldDetail = new FieldDetail();
+                fieldDetail.setName(struct.getFields().get(j).getName());
+                fieldDetail.setType(struct.getFields().get(j).getType());
+                fieldDetails.add(fieldDetail);
+            }
+            Field field = new Field();
+            field.setName(struct.getName());
+            field.setFields(fieldDetails);
+            output.add(field);
+        }
+        return output;
+    }
+
+    /**
+     * @param id
+     * @return Map{}
+     */
+    @Override
+    public Object get(Object id) {
+        assert this.contract != null;
+        assert this.account != null;
+        assert this.enityName != null;
+        assert eosApi != null;
+        TableRow result = getTableRows(this.account.getName(), this.contract, this.enityName,
+                id.toString(), id.toString(), "1");
+        if (result.getRows().size() > 0) {
+            return result.getRows().get(0);
+        } else {
+            return "Not found";
+        }
+    }
+
+    @Override
+    public Object add(HashMap<String, Object> params) {
+        String methodName = "cre" + this.enityName;
+        String privateKey = this.account.getPrivateKey();
+        String from = this.account.getName();
+        params.put("user", this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
+        return sendTransaction(from, methodName, data.getBinargs(), privateKey);
+    }
+
+    private String sendTransaction(String from, String action, String transferData, String privateKey) {
+        SignArg arg = eosApi.getSignArg(120);
+
+        // create the authorization
+        List<TransactionAuthorization> authorizations = Collections.singletonList(new TransactionAuthorization(from, "active"));
+
+        // build the all actions
+        List<TransactionAction> actions = Collections.singletonList(//
+                new TransactionAction(this.account.getName(), action, authorizations, transferData)//
+        );
+
+        // build the packed transaction
+        PackedTransaction packedTransaction = new PackedTransaction();
+
+        packedTransaction.setExpiration(arg.getHeadBlockTime().plusSeconds(arg.getExpiredSecond()));
+
+        packedTransaction.setRefBlockNum(arg.getLastIrreversibleBlockNum());
+        packedTransaction.setRefBlockPrefix(arg.getRefBlockPrefix());
+
+        packedTransaction.setMaxNetUsageWords(0);
+        packedTransaction.setMaxCpuUsageMs(0);
+        packedTransaction.setDelaySec(0);
+        packedTransaction.setActions(actions);
+
+        String hash = sign(privateKey, arg, packedTransaction);
+        PushTransactionRequest req = new PushTransactionRequest();
+        req.setTransaction(packedTransaction);
+        req.setSignatures(Collections.singletonList(hash));
+
+        PushedTransaction pts = eosApi.pushTransaction(req);
+        return pts.getTransactionId();
+    }
+
+    @Override
+    public Object update(String id, HashMap<String, Object> params) {
+        String methodName = "upd" + this.enityName;
+        String privateKey = this.account.getPrivateKey();
+        String from = this.account.getName();
+        params.put("user", this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, params);
+        return sendTransaction(from, methodName, data.getBinargs(), privateKey);
+    }
+
+    @Override
+    public Object delete(String id) {
+        String methodName = "del" + this.enityName;
+        String privateKey = this.account.getPrivateKey();
+        String from = this.account.getName();
+        Map<String, String> d = new HashMap<>(2);
+        d.put("id", id);
+        d.put("user", this.account.getName());
+        AbiJsonToBin data = eosApi.abiJsonToBin(this.account.getName(), methodName, d);
+        return sendTransaction(from, methodName, data.getBinargs(), privateKey);
+    }
+
+    /**
+     * Validation in EOS Network with the condition below:
+     * - check the method name exist or not in ABI,...
+     * - check non-null input: private key, account name, method is lower case
+     *
+     * @return
+     */
+    @Override
+    public boolean validate() {
+        return true;
+    }
+
+
+    /**
+     * Local Sign Transaction
+     *
+     * @param privateKey
+     * @param arg
+     * @param t
+     * @return
+     */
+    private String sign(String privateKey, SignArg arg, PackedTransaction t) {
+        Raw raw = Packer.packPackedTransaction(arg.getChainId(), t);
+        raw.pack(ByteBuffer.allocate(33).array());
+        return KeyUtil.signHash(privateKey, raw.bytes());
+    }
+
+    /**
+     * Custom source from pull request ref: https://github.com/adyliu/jeos/pull/10/files
+     *
+     * @param scope
+     * @param code
+     * @param table
+     * @param lower_bound
+     * @param upper_bound
+     * @param limit
+     * @return
+     */
+    TableRow getTableRows(String scope, String code, String table, String lower_bound, String upper_bound, String limit) {
+        LinkedHashMap<String, String> requestParameters = new LinkedHashMap<>(7);
+
+        requestParameters.put("scope", scope);
+        requestParameters.put("code", code);
+        requestParameters.put("table", table);
+        requestParameters.put("lower_bound", lower_bound);
+        requestParameters.put("upper_bound", upper_bound);
+        requestParameters.put("limit", limit);
+        requestParameters.put("json", "true");
+        EosChainApiService eosChainApiService = EosApiServiceGenerator.createService(EosChainApiService.class, this.url);
+
+        return EosApiServiceGenerator.executeSync(eosChainApiService.getTableRows(requestParameters));
+    }
+}

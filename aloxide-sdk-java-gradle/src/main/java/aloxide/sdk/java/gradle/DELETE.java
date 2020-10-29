@@ -1,30 +1,28 @@
-package kr.co.lecle.aloxide;
+package aloxide.sdk.java.gradle;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-
 /**
- * Created by quocb14005xx on 22,October,2020
+ * Created by quocb14005xx on 23,October,2020
  */
-public class GET {
-
+public class DELETE {
     public static void main(String[] args) {
-        System.out.println("[Aloxide JavaSDK]::::::GET");
+        System.out.println("[Aloxide JavaSDK]::::::DELETE");
+
 
         if (args.length <= 1) {
-            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle GET --args=\"entity_name ID\"");
+            System.out.println("Please provide the required field the Entity name, ID. Follow this statement: gradle DELETE --args=\"entity_name ID\"");
+
             return;
         }
 
         String id = args[1];
         String entityName = args[0];
-//        String id = "123";
-//        String entityName = "Poll";
 
-        System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
+        // System.out.println("Arguments: id=" + id + ", entityName=" + entityName);
 
         File file = AloxideUtils.getEnvFile();
 
@@ -37,6 +35,7 @@ public class GET {
                 String pk = properties.getProperty("app_blockchain_account_pk");
                 String url = properties.getProperty("app_blockchain_url");
                 String blockchainType = properties.getProperty("app_blockchain_type");
+                String host = properties.getProperty("app_blockchain_host");
 
                 Aloxide aloxide;
                 if (blockchainType.contains("eos")) {
@@ -46,11 +45,12 @@ public class GET {
                 }
                 try {
 
-                    Object result = aloxide.get(id);
+                    Object result = aloxide.delete(id);
                     System.out.println("\n\n\n\n\n");
                     System.out.println("--------------- YOUR RESULT HERE ---------------");
                     System.out.println("================================================");
-                    System.out.println(result);
+                    System.out.println("Transaction ID: " +result+"\n");
+                    System.out.println("Verify information: " + AloxideUtils.getTransactionUrl(result.toString(), aloxide.aloxideData.network, host));
                     System.out.println("================================================");
                     System.out.println("------------------------------------------------");
                     System.out.println("\n\n\n\n\n");

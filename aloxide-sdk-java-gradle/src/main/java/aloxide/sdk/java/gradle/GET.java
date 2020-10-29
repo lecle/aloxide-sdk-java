@@ -1,4 +1,4 @@
-package kr.co.lecle.aloxide;
+package aloxide.sdk.java.gradle;
 
 import java.io.File;
 import java.io.FileInputStream;
