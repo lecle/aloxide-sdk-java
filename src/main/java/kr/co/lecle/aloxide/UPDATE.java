@@ -51,9 +51,9 @@ public class UPDATE {
                     for (int i = 0; i < fields.size(); i++) {
                         if (fields.get(i).getName().equals(method)) {
                             int sizeOfFields = fields.get(i).getFields().size();
-                            if (blockchainType.contains("eos")) {
-                                sizeOfFields--;
-                            }
+//                            if (blockchainType.contains("eos")) {
+//                                sizeOfFields--;
+//                            }
 
                             StringBuilder f = new StringBuilder();
 
@@ -62,13 +62,22 @@ public class UPDATE {
                                 f.append(fieldDetail.getName()).append(", ");
                             }
 
-                            if (sizeOfFields != args.length - 1) {
-                                System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
-                                return;
+                            if (blockchainType.contains("eos")) {
+                                if (sizeOfFields - 1 != args.length - 1) {
+                                    System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
+                                    return;
+                                }
+                            } else {
+                                if (sizeOfFields != args.length - 1) {
+                                    System.out.println("Wrong arguments, you passed wrong arguments. Please follow these fields [" + f.toString() + "]");
+                                    return;
+                                }
                             }
                             for (int j = 0; j < sizeOfFields; j++) {
                                 FieldDetail fieldDetail = fields.get(i).getFields().get(j);
-                                d.put(fieldDetail.getName(), args[j + 1]);
+                                if (!fieldDetail.getName().equals("user")) {
+                                    d.put(fieldDetail.getName(), args[j]);
+                                }
                             }
                             break;
                         }
