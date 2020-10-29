@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.jafka:jeos:0.9.16">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.jafka/jeos/0.9.16/14917787d2f4b78c83bbbe28cd8f37e226a870c6/jeos-0.9.16.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.jafka/jeos/0.9.16/9e69b3e7b0f095101729e5707cafd22d8fa9a22c/jeos-0.9.16-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
